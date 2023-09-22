@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link href="./style.css" rel="stylesheet"/>
+
+  <style>
+    nav {
+      font-family: Helvetica;
+    }
+    p {
+      text-align: left;
+      font-family: Helvetica;
+    }
+    h1 {
+      text-align: center;
+      font-family: Helvetica;
+    }
+
+    h2 {
+      text-align: center;
+      font-family: Helvetica; 
+    }
+
+    div {
+      text-align: center;
+      font: 36px Helvetica;
+    }
+  </style>
+<nav><a href="/">Homepage</a></nav>
+</head>
+
+
+<body>
+  <p>Jennifer Wilson (C2885984)</p>
+  <h1>Do you know your worth in the workplace?</h1>
+  <h2>Find out how your earnings compare to others in the data science community.</h2>
+  <div id="heatmap"></div>
+
+  <script>
+
+d3.json("datakeyed.json").then(function(data) {
+
+    const margin = { top: 50, right: 160, bottom: 100, left: 160 };
+    const width = 900 - margin.left - margin.right;
+    const height = 500 - margin.top - margin.bottom;
+
+    const svg = d3.select("#heatmap")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("style", "font-family: Helvetica; font-size: 13px")
+        .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+        const myBlues = ["#F9F9F9", "#f0f3f3", "#e1e4e4", "#c5d9d9" ,"#a9cece", "#8ec3c3", "#76B8B8", "#5DB8A5", "#459393", "#2B7E7E", "#176C6C", "#085656"];
+
+const customColorScale = d3.scaleSequential((d) =>
+  d3.interpolate(myBlues[0], myBlues[myBlues.length - 1])(d / (myBlues.length - 1))
+);
+
+
+const colorScale = d3.scaleSequential((t) => d3.interpolate(myBlues[0], myBlues[myBlues.length - 1])(t))
+  .domain([0, d3.max(data, d => d.count)]);
+
+// Define the x and y scales
+const xScale = d3.scaleBand()
+  .domain(data.map(d => d.salaryBand))
+  .range([0, width])
+  .padding(0.1);
+
+const yScale = d3.scaleBand()
+  .domain(data.map(d => d.education))
+  .range([height, 0])
+  .padding(0.1);
+
+// Add x axis label
+svg.append("text")
+  .attr("class", "x-label")
+  .attr("text-anchor", "middle")
+  .attr("x", width / 2)
+  .attr("y", height + margin.bottom / 2)
+  .text("Salary Bracket (in USD)");
+
+// Add y axis label
+svg.append("text")
+  .attr("class", "y-label")
+  .attr("text-anchor", "middle")
+  .attr("transform", `translate(${-margin.left / 1.5}, ${height / 2})rotate(-90)`)
+  .text("Highest Level of Education");
+
+// Create the heatmap rectangles
+svg.selectAll(".rect")
+  .data(data)
+  .enter()
+  .append("rect")
+  .attr("class", "rect")
+  .attr("x", d => xScale(d.salaryBand))
+  .attr("y", d => yScale(d.education))
+  .attr("width", xScale.bandwidth())
+  .attr("height", yScale.bandwidth())
+  .attr("stroke", "black")
+  .attr("stroke-width", 1)
+  .attr("fill", d => colorScale(d.count))
+  .on("mouseover", (event, d) => {
+  
+  // Show tooltip on mouseover
+    tooltip.style("opacity", 1)
+      .html(`<b>Education:</b> ${d.education}<br><b>Salary Band:</b> ${d.salaryBand}, <br><b>Count:</b> ${d.count}<br> The number of <b>men</b> in this category is: ${d.man}<br> The number of <b>women</b> in this category is: ${d.woman}`)
+      .style("left", (event.pageX + 10) + "px")
+      .style("top", (event.pageY - 30) + "px");
+  })
+
+  // Hide tooltip on mouseout
+  .on("mouseout", () => {
+    tooltip.style("opacity", 0);
+  });
+
+// Create the x and y axes
+const xAxis = d3.axisBottom(xScale);
+const yAxis = d3.axisLeft(yScale);
+
+svg.append("g")
+  .attr("class", "x-axis")
+  .attr("transform", `translate(0, ${height})`)
+  .call(xAxis);
+
+svg.append("g")
+  .attr("class", "y-axis")
+  .call(yAxis);
+
+// Create the tooltip
+const tooltip = d3.select("#heatmap")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0)
+  .style ("font-size", "14px")
+  .style("font-family", "Helvetica")
+})
+</script>
+</body>
+</html>

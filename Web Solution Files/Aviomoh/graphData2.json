@@ -1,0 +1,21 @@
+{
+  "nodes": [{ "name": "PYTHON", "value": "80", "number": "65,940", "percentage": "100%" }, { "name": "SQL", "value": "70","number": "33,090", "percentage": " 88%"  },
+     { "name": "R", "value": "65", "number": "20,890", "percentage": "82%"  }, { "name": "JAVA" , "value": "60",  "number": "14,400", "percentage": "88%" },
+    { "name": "C++", "value": "50",  "number": "11,620", "percentage": "91%" }, { "name": "JAVASCRIPT" , "value": "55",  "number": "12,750", "percentage": "87%" }, 
+    { "name": "MATLAB" , "value": "35",  "number": "9,321", "percentage": "91%" }, { "name": "SWIFT", "value": "25",  "number": "441", "percentage": "85%"  },
+     { "name": "BASH" , "value": "30",  "number": "8,738 ", "percentage": "94%" }, { "name": "JULIA", "value": "25",  "number": "798 ", "percentage": "89%"  },
+      { "name": "C", "value": "45",  "number": "9697 ", "percentage": "90%" }],
+   "links": [
+     { "Name": "Sql", "source": "PYTHON", "target": "SQL", "thickness":"9", "Percentage": "44%"},
+     { "Name": "C", "source": "PYTHON", "target": "C", "thickness":"4", "Percentage": "13%"  },
+     { "Name": "Java", "source": "PYTHON", "target": "JAVA" , "thickness":"7", "Percentage": "19%" },
+     { "Name": "Javascript", "source": "PYTHON", "target": "JAVASCRIPT" , "thickness":"6", "Percentage": "17%" },
+     { "Name": "C++", "source": "PYTHON", "target": "C++" , "thickness": "5", "Percentage": "16%" },
+     { "Name": "Matlab", "source": "PYTHON", "target": "MATLAB", "thickness":"4", "Percentage": "13%" },
+     { "Name": "Swift", "source": "PYTHON", "target": "SWIFT" , "thickness":"2", "Percentage": "1%"  },
+     { "Name": "Bash", "source": "PYTHON", "target": "BASH", "thickness":"3", "Percentage": "12%" },
+     { "Name": "Julia", "source": "PYTHON", "target": "JULIA", "thickness":"2", "Percentage": "1%" },
+     { "Name": "R", "source": "PYTHON", "target": "R", "thickness":"8", "Percentage": "26%" }
+   ]
+
+  }

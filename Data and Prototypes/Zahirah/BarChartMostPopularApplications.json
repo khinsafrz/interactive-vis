@@ -1,0 +1,247 @@
+[
+    {
+      "value": 5488,
+      "application": {
+        "name": "Jupyter/IPython",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 4771,
+      "application": {
+        "name": "RStudio",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 12281,
+      "application": {
+        "name": "Visual Studio",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 7468,
+      "application": {
+        "name": "PyCharm",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 3794,
+      "application": {
+        "name": "Spyder",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 3937,
+      "application": {
+        "name": "Notepad++",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 2839,
+      "application": {
+        "name": "Sublime Text",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 1646,
+      "application": {
+        "name": "Vim",
+        "category": "IDE"
+      }
+    },
+    {
+      "value": 2203,
+      "application": {
+        "name": "MATLAB",
+        "category": "IDE"
+}
+      },
+    {
+      "value": 1794,
+      "application": {
+        "name": "Google Cloud Datalab",
+        "category": "HN"
+      }
+    },
+    {
+      "value": 590,
+      "application": {
+        "name": "Databricks Collaborative Notebooks",
+        "category": "HN"
+      }
+    },
+    {
+      "value": 2051,
+      "application": {
+        "name": "Google Cloud Notebooks",
+        "category": "HN"
+      }
+    },
+    {
+      "value": 753,
+      "application": {
+        "name": "Amazon Sagemaker Studio Notebooks",
+        "category": "HN"
+      }
+    },
+    {
+      "value": 1067,
+      "application": {
+        "name": "IBM Watson Studio",
+        "category": "HN"
+      }
+    },
+    {
+      "value": 1770,
+      "application": {
+        "name": "Binder / JupyterHub",
+        "category": "HN"
+      }
+    },
+    {
+      "value": 1062,
+      "application": {
+        "name": "Azure Notebooks",
+        "category": "HN"
+      }
+    },
+    {
+      "value": 9507,
+      "application": {
+        "name": "Kaggle Notebooks",
+        "category": "HN"
+	}
+      },
+    {
+      "value": 9792,
+      "application": {
+        "name": "Colab Notebooks",
+        "category": "HN"
+      }
+    },
+{
+      "value": 212,
+      "application": {
+        "name": "Alteryx",
+        "category": "BI"
+      }
+    },
+    {
+      "value": 231,
+      "application": {
+        "name": "SAP Analytics Cloud",
+        "category": "BI"
+      }
+    },
+    {
+      "value": 432,
+      "application": {
+        "name": "Qlik",
+        "category": "BI"
+      }
+    },
+    {
+      "value": 391,
+      "application": {
+        "name": "Salesforce",
+        "category": "BI"
+      }
+    },
+    {
+      "value": 2564,
+      "application": {
+        "name": "Tableau",
+        "category": "BI"
+      }
+    },
+    {
+      "value": 246,
+      "application": {
+        "name": "Amazon QuickSight",
+        "category": "BI"
+      }
+    },
+    {
+      "value": 919,
+      "application": {
+        "name": "Google Data Studio",
+        "category": "BI"
+      }
+    },
+    {
+      "value": 2405,
+      "application": {
+        "name": "Microsoft Power BI",
+        "category": "BI"
+	}
+      },
+    {
+      "value": 583,
+      "application": {
+        "name": "Google Cloud SQL",
+        "category": "BD"
+      }
+    },
+{
+      "value": 889,
+      "application": {
+        "name": "Google Cloud BigQuery",
+        "category": "BD"
+      }
+    },
+    {
+      "value": 582,
+      "application": {
+        "name": "Amazon Redshift",
+        "category": "BD"
+      }
+    },
+    {
+      "value": 1906,
+      "application": {
+        "name": "Microsoft SQL Server",
+        "category": "BD"
+      }
+    },
+    {
+      "value": 2260,
+      "application": {
+        "name": "PostgreSQL",
+        "category": "BD"
+      }
+    },
+    {
+      "value": 1658,
+      "application": {
+        "name": "MongoDB",
+        "category": "BD"
+      }
+    },
+    {
+      "value": 1103,
+      "application": {
+        "name": "Oracle Database",
+        "category": "BD"
+      }
+    },
+    {
+      "value": 1640,
+      "application": {
+        "name": "SQLite",
+        "category": "BD"
+      }
+    },
+    {
+      "value": 3576,
+      "application": {
+        "name": "MySQL",
+        "category": "BD"
+	}
+      }
+  ]

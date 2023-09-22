@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Most Popular Applications</title>
+    <meta name="description" content="Most Popular Applications" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://d3js.org/d3.v7.min.js" charset="utf-8"></script>
+
+    <style>
+    nav {
+      font-family: Helvetica;
+    }
+    p {
+      text-align: left;
+      font-family: Helvetica;
+    }
+    h1 {
+        text-align: center;
+        font-family: Helvetica;
+        }
+    h3 {
+        text-align: center;
+        font-family: Helvetica;
+        }
+    div {
+        text-align: center;
+        font-family: Helvetica;
+    }
+      div.tooltip {
+        position: absolute;
+        text-align: center;
+        width: 75px;
+        height: 28px;
+        padding: 2px;
+        font: 12px Helvetica;
+        background: rgb(192, 221, 255);
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+        }
+      rect {
+        fill-opacity: 0.8;
+      }
+      rect:hover {
+        fill-opacity: 1;
+      }
+      .axis {
+        font-size: smaller;
+      }
+    </style>
+  <nav><a href="/">Homepage</a></nav>
+  </head>
+  
+  <body>
+    <p>Khinsa Fairuz Zahirah (C2357551)</p>
+    <h1>Most Popular Applications
+    </h1>
+    <h3>Uncover the trendiest apps loved by the Kaggle community!
+    </h3>
+
+    <div>
+        <br>
+        <strong>Filter by category:</strong>
+      <label><input type="radio" id = "filters" name="apps" value="IDE" />IDE</label>
+      <label><input type="radio" id = "filters" name="apps" value="HN" />Hosted Notebooks</label>
+      <label><input type="radio" id = "filters" name="apps" value="BI" />Business Intelligence</label>
+      <label><input type="radio" id = "filters" name="apps" value="BD" />Big Data</label>
+      &nbsp &nbsp &nbsp<button id="reset">Reset</button>
+      <br><br>
+    </div>
+
+    <div id="svg-container">
+    </div>
+
+    <script>
+      //interactivity
+      d3.selectAll("#filters").on("click", function () {
+      const selected = d3.select('input[name="apps"]:checked').property("value");
+      const filtered_data = data.filter((d) => d.application.category === selected);
+
+      update(filtered_data);
+      });
+
+      d3.select("#reset").on("click", function() {
+		update(data)
+	});
+
+      const margin = { top: 40, bottom: 10, left: 250, right: 250 };
+      const width = 1250 - margin.left - margin.right;
+      const height = 800 - margin.top - margin.bottom;
+
+      // Creates sources <svg> element
+      const svg = d3.select("body").select("#svg-container")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom);
+
+      // Group used to enforce margin
+      const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+
+      const div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+      // Global variable for all data
+      let data;
+
+      // Scales setup
+      const xscale = d3.scaleLinear().range([0, width]);
+      const yscale = d3.scaleBand().rangeRound([0, height]).paddingInner(0.1);
+
+      // Axis setup
+      const xaxis = d3.axisTop().scale(xscale);
+      const g_xaxis = g.append("g").attr("class", "x axis");
+      const yaxis = d3.axisLeft().scale(yscale);
+      const g_yaxis = g.append("g").attr("class", "y axis");
+
+      /////////////////////////
+
+      d3.json("BarChartMostPopularApplications.json").then((json) => {
+        data = json;
+        data.sort(function(b, a) {
+        return a.value - b.value;
+        });
+        update(data);
+      });
+
+      // colour picker
+      function colourPicker(d){
+        if (d.application.category === "IDE"){return "#2B7E7E"}
+        if (d.application.category === "HN"){return "#D36247"}
+        if (d.application.category === "BD"){return "#33985C"}
+        if (d.application.category === "BI"){return "#D38647"}
+      }
+
+      function update(new_data) {
+        //update the scales
+        xscale.domain([0, d3.max(new_data, (d) => d.value)]);
+        yscale.domain(new_data.map((d) => d.application.name));
+        //render the axis
+        g_xaxis.transition().call(xaxis);
+        g_yaxis.transition().call(yaxis);
+
+        // Render the chart with new data
+
+        // DATA JOIN use the key argument for ensurign that the same DOM element is bound to the same data-item
+        const rect = g
+          .selectAll("rect")
+          .data(new_data, (d) => d.application.name)
+          .join(
+            // ENTER
+            // new elements
+            (enter) => {
+              const rect_enter = enter.append("rect").attr("x", 0);
+              rect_enter.append("title");
+              return rect_enter;
+            },
+            // UPDATE
+            // update existing elements
+            (update) => update,
+            // EXIT
+            // elements that aren't associated with data
+            (exit) => exit.remove()
+          );
+
+        // ENTER + UPDATE
+        // both old and new elements
+        rect
+          .transition()
+          .attr("height", yscale.bandwidth())
+          .attr("width", (d) => xscale(d.value))
+          .attr("y", (d) => yscale(d.application.name))
+          .attr("fill", function(d){return colourPicker(d)});
+        rect
+            .on("mouseover", function(event,d) {
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Exact value:" + "<br/>" + d.value)
+                .style("left", (event.pageX) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+            });
+        rect.select("title").text((d) => d.application.name);
+      };
+
+    </script>
+  </body>
+</html>

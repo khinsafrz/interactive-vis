@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+  nav {
+    font-family: Helvetica;
+  }
+  p {
+      text-align: left;
+      font-family: Helvetica;
+    }
+</style>
+<nav><a href="/">Homepage</a></nav>
+<body>
+  <p>Richard Agbomire Aviomoh (A0407193)</p>
+	<div id="my_dataviz"></div>
+
+</body>
+<script>
+  // set the dimensions and margins of the chart
+  const margin = {top: 10, right: 30, bottom: 10, left: 30},
+      width = 1850 - margin.left - margin.right,
+      height = 880 - margin.top - margin.bottom;
+  
+  // append the svg object to the body of the page
+  const svg = d3.select("#my_dataviz")
+    .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+  //Creating Tooltip
+  const tooltip = d3.select("body")
+      .append("div")
+      .style("position", "centre")
+      .style("visibility", "hidden")
+      .style("color", "white")
+      .style("padding", "8px")
+      .style("background-color", "#85260D")
+      .style("border-radius", "6px")
+      .style("text-align", "center")
+      .style("width", "auto")
+      .style("font-family", "Helvetica")
+      .text("");
+  
+  //Create Chart Title
+  svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", 410)
+        .attr("y", 10)
+        .text("Find The Ideal Programming Language For You Using This Interactive Network Chart!")
+        .attr("text-anchor", "start")
+        .attr("font-weight", "Bold")
+        .style("font-family", "Helvetica")
+        .style("font-size", "25px") 
+  </script>
+
+<script>
+  //Importing the Data
+  d3.json("graphData2.json").then(function(graphData) {
+
+  //Creating Force Simulation
+  const simulation = d3
+    .forceSimulation(graphData.nodes)
+    .force("charge", d3.forceManyBody().strength(-13000))
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("link", d3.forceLink(graphData.links).id(d => d.name))
+    .on("tick", ticked);
+
+  //Creating Functions 
+
+    function ticked() {
+    //"textAndNodes" is a variable created later on for each nodes in the chart containg the name of each programming language.
+    textsAndNodes.attr("transform", function(d) {
+      return "translate(" + d.x + ", " + d.y + ")";
+    });
+
+    //Creating links between python and other languages
+    links
+      .attr("x1", function(d) {
+        return d.source.x;
+      })
+      .attr("y1", function(d) {
+        return d.source.y;
+      })
+      .attr("x2", function(d) {
+        return d.target.x;
+      })
+      .attr("y2", function(d) {
+        return d.target.y;
+      });
+    console.log(simulation.alpha());
+  }
+  //Creating drag functions to make the nodes moveable
+  function drag_started(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+    
+  function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+    
+  function drag_ended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+  
+  //Creating a variable that contains all drag functions making it easier to call all functions simultaneously when required.
+  const drag = d3
+    .drag()
+    .on("start", drag_started)
+    .on("drag", dragged)
+    .on("end", drag_ended);
+    
+  //Creating links in the form of path-lines between python and other languages and addding hover effects
+  const links = svg
+    .append("g")
+    .selectAll("path.line")
+    .data(graphData.links)
+    .enter()
+    .append("line")
+    .attr("stroke-length", 30)
+    .attr("stroke-width", function (d) { return d.thickness * 1;})
+    .style("stroke", "#085656")
+    .on("mouseover", function(event,d) {d3.select(this).style("stroke", "#85260D").attr("stroke-width", function (d) { return d.thickness * 3;});})                  
+    .on("mouseout", function(event,d) {d3.select(this).style("stroke", "#085656").attr("stroke-width", function (d) { return d.thickness * 1;});})
+    .on("mouseenter", function(event,d){
+                  tooltip.html("Percentage of Python Users That Also Use " + d.Name +" :     " + d.Percentage); 
+                  return tooltip.style("visibility", "visible");})
+    .on("mouseleave", function(){return tooltip.style("visibility", "hidden");});
+
+
+  //Creating the nodes and adding hover effect
+  const textsAndNodes = svg
+    .append("g")
+    .selectAll("g")
+    .data(graphData.nodes)
+    .enter()
+    .append("g")
+    .style("text-anchor", "middle")
+    .style("font-family", "Helvetica")
+    .call(drag)
+    .on("mouseover", function(event,d) {d3.select(this).attr("r", 80).style("fill", "white");})                
+    .on("mouseout", function(event,d) {d3.select(this).attr("r", 40).style("fill", "black");})
+    .on("mouseenter", function(event,d){
+                  tooltip.html("Programming Language:   " + d.name + "<br>Total Number of Users:    " + d.number + "<br>Percentage of Users That Also Use Python:    " + d.percentage );
+                  return tooltip.style("visibility", "visible");})
+    .on("mouseleave", function(){return tooltip.style("visibility", "hidden");});
+  
+  //Creating a colour range 
+  const myColor = d3.scaleOrdinal().domain(textsAndNodes)
+    .range(["#085656", "#2B7E7E", "#2B7E7E", "#2B7E7E", "#76B8B8", "#2B7E7E", "#76B8B8", "#76B8B8", "#76B8B8", "#76B8B8", "#76B8B8"])
+
+  //Creating circles which are appended to each node
+  const circles = textsAndNodes
+    .append("circle", "text")
+    .attr("r", function (d) { return d.value * 1; })
+    .attr("fill",function(d){return myColor(d) })
+    .on("mouseover", function(event,d) {d3.select(this).attr("r", 80).style("fill", "#85260D");})                  
+    .on("mouseout", function(event,d) {d3.select(this).attr("r",  function (d) { return d.value * 1; }).style("fill",function(d){return myColor(d) });});
+
+  //Creating a text variable which is appended to each node 
+  const texts = textsAndNodes.append("text").text(function(d) {
+    return d.name;
+  });
+
+
+  })
+
+</script>
